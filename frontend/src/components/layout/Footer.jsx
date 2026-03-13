@@ -143,7 +143,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-600">
-            © 2025 ApnaGhar. Made with ❤️ in India 🇮🇳
+            © 2025 ApnaGhar by Samir Alam. Made with ❤️ in India 🇮🇳
           </p>
 
           <div className="flex items-center gap-4 text-xs">
