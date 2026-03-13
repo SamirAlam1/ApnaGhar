@@ -51,7 +51,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
               <img src="/logo.svg" alt="ApnaGhar Logo" className="h-9 w-9" />
-              <span className="font-bold text-xl text-white">
+                <span className="font-bold text-xl text-gray-900 dark:text-white">
                 Apna<span className="text-teal-400">Ghar</span>
               </span>
             </div>
@@ -68,7 +68,7 @@ export default function Footer() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center ${hover}`}
+                  className={`w-8 h-8 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 flex items-center justify-center transition-colors ${hover}`}
                 >
                   <Icon size={14} />
                 </a>
@@ -78,7 +78,7 @@ export default function Footer() {
 
           {/* Cities */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm">
+              <h4 className="text-gray-900 dark:text-white font-semibold mb-4 text-sm">
               Properties by City
             </h4>
             <ul className="space-y-2">
@@ -97,7 +97,7 @@ export default function Footer() {
 
           {/* Types */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm">
+            <h4 className="text-gray-900 dark:text-white font-semibold mb-4 text-sm">
               Property Types
             </h4>
             <ul className="space-y-2">
@@ -116,7 +116,7 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm">
+            <h4 className="text-gray-900 dark:text-white font-semibold mb-4 text-sm">
               Company
             </h4>
             <ul className="space-y-2">
