@@ -18,12 +18,12 @@ const CITIES_DATA = [
 ];
 
 const WHY_US = [
-  { icon: '🔍', title: 'Smart Recommendations', desc: "Find properties matching your preferences across top Indian cities." },
-  { icon: '✅', title: 'RERA Verified Listings',      desc: 'All properties are verified for RERA compliance and legal safety.' },
-  { icon: '🔍', title: 'Smart Filters',               desc: 'Filter by BHK, budget, city, furnishing, amenities and more.' },
-  { icon: '💬', title: 'Direct Seller Connect',       desc: 'Contact sellers directly — no middlemen, no hidden charges.' },
-  { icon: '📱', title: 'Mobile First Design',         desc: 'Seamless experience on any device, anytime, anywhere.' },
-  { icon: '🇮🇳', title: 'Multilingual Support',      desc: 'Available in English, Hindi and Gujarati for maximum accessibility.' },
+  { icon: '🔍', title: 'Smart Recommendations',  desc: 'Find properties matching your preferences across top Indian cities.' },
+  { icon: '✅', title: 'RERA Verified Listings',  desc: 'All properties are verified for RERA compliance and legal safety.' },
+  { icon: '🔎', title: 'Smart Filters',           desc: 'Filter by BHK, budget, city, furnishing, amenities and more.' },
+  { icon: '💬', title: 'Direct Seller Connect',   desc: 'Contact sellers directly — no middlemen, no hidden charges.' },
+  { icon: '📱', title: 'Mobile First Design',     desc: 'Seamless experience on any device, anytime, anywhere.' },
+  { icon: '🇮🇳', title: 'Multilingual Support',  desc: 'Available in English, Hindi and Gujarati for maximum accessibility.' },
 ];
 
 function SectionTitle({ badge, title, subtitle }) {
@@ -90,7 +90,7 @@ function ListPropertyButton({ className, children }) {
     if (user && user.role === 'seller') {
       navigate('/list-property');
     } else if (user && user.role !== 'seller') {
-      navigate('/dashboard'); // buyer ko dashboard pe bhejo
+      navigate('/dashboard');
     } else {
       navigate('/register?role=seller');
     }
@@ -187,7 +187,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Smart Banner */
+      {/* Smart Banner */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <motion.div
@@ -202,7 +202,7 @@ export default function HomePage() {
             <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full bg-purple-500/20 blur-3xl" />
             <div className="relative z-10">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 text-sm font-medium mb-6">
-                <Sparkles size={14} /> Powered by Artificial Intelligence
+                <Sparkles size={14} /> Smart Property Search
               </span>
               <h2 className="font-display font-bold text-3xl sm:text-5xl mb-4">
                 Let Us Find Your<br />Perfect Home
@@ -255,6 +255,7 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
     </div>
   );
 }
