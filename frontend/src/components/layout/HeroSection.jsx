@@ -84,7 +84,7 @@ export default function HeroSection() {
           className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-white text-sm font-medium"
         >
           <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
-          🇮🇳 India's AI-Powered Real Estate Platform
+          🇮🇳 India's Smart Real Estate Platform
         </motion.div>
 
         {/* Heading */}
