@@ -28,7 +28,7 @@ app.use(
 );
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
-const allowedOrigins = (process.env.CLIENT_URL || 'https://apna-ghar-finder.vercel.app/api')
+const allowedOrigins = (process.env.CLIENT_URL || 'https://apna-ghar-finder.vercel.app')
   .split(',')
   .map((o) => o.trim());
 
