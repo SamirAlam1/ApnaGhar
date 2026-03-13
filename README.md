@@ -1,18 +1,52 @@
 # 🏡 ApnaGhar — AI-Powered Indian Real Estate Marketplace
 
-India's smart property search platform — find, list, and discover verified properties across major Indian cities.
+> India's smartest property search platform — Powered by AI, trusted by 50,000+ families.
+
+[![Node](https://img.shields.io/badge/Node-18%2B-green)](https://nodejs.org)
+[![React](https://img.shields.io/badge/React-18-blue)](https://react.dev)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green)](https://mongodb.com)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
+---
+
+## 📋 Project Description
+
+ApnaGhar is a full-stack MERN real estate marketplace targeting the Indian market. It features AI-powered property recommendations, multi-language support (English, Hindi, Gujarati), RERA-verified listings, and a secure, production-ready authentication system.
+
+---
+
+## ✨ Features
+
+| Category | Feature |
+|---|---|
+| Auth | Register / Login with email + password |
+| Auth | Email verification via secure token (Nodemailer + Gmail SMTP) |
+| Auth | Forgot / Reset password flow |
+| Auth | Brute-force protection (account lockout after 5 failed attempts) |
+| Auth | Disposable email domain blocking |
+| Auth | Indian phone number format validation |
+| Properties | Browse, filter, search listings |
+| Properties | RERA-verified badge, furnishing status |
+| Properties | Grid / list view |
+| AI | Smart search, AI property recommendations |
+| i18n | English, Hindi (हिन्दी), Gujarati (ગુજરાતી) |
+| UI | Dark / Light mode, Framer Motion animations |
+| Security | JWT auth, Helmet, rate limiting, input sanitisation |
 
 ---
 
 ## 🚀 Tech Stack
 
-| Layer     | Technology                                        |
-|-----------|---------------------------------------------------|
-| Frontend  | React 18, Vite, Tailwind CSS, Framer Motion       |
-| Backend   | Node.js, Express.js, MongoDB (Mongoose)           |
-| Auth      | JWT + bcrypt, Role-based (Buyer / Seller)         |
-| i18n      | i18next — English, Hindi, Gujarati                |
-| File Upload | Multer (local disk storage)                     |
+| Layer | Technology |
+|---|---|
+| Frontend | React 18, Vite, Tailwind CSS, Framer Motion |
+| Backend | Node.js 18+, Express.js |
+| Database | MongoDB (Mongoose ODM) |
+| Auth | JWT + bcrypt (12 rounds) |
+| Email | Nodemailer + Gmail SMTP (free) |
+| Security | Helmet, express-rate-limit, input validation |
+| i18n | i18next (EN / HI / GU) |
+| Deploy | Vercel (frontend) + Render (backend) |
 
 ---
 
@@ -20,60 +54,63 @@ India's smart property search platform — find, list, and discover verified pro
 
 ```
 ApnaGhar/
-├── backend/
-│   ├── config/         # MongoDB connection
-│   ├── controllers/    # authController, propertyController
-│   ├── middleware/     # JWT protect + role authorize
-│   ├── models/         # User, Property, Review schemas
-│   ├── routes/         # /api/auth, /api/properties
-│   ├── utils/          # Standardized API response helpers
-│   ├── .env.example
+├── backend/                   # Node + Express API
+│   ├── controllers/
+│   │   └── authController.js  # register, login, verify-email, forgot/reset password
+│   ├── middleware/
+│   │   ├── auth.js            # JWT protect + authorize
+│   │   └── validate.js        # Input validation + sanitisation middleware
+│   ├── models/
+│   │   ├── User.js            # User schema with validation
+│   │   ├── Property.js
+│   │   └── Review.js
+│   ├── routes/
+│   │   ├── auth.js            # Auth routes
+│   │   └── properties.js
+│   ├── utils/
+│   │   ├── email.js           # Nodemailer email sender
+│   │   └── response.js        # Standardised API responses
+│   ├── config/db.js
+│   ├── server.js
 │   ├── package.json
-│   └── server.js
+│   ├── .env.example
+│   └── README.md
 │
-├── frontend/
-│   ├── public/         # Static assets (logo.svg)
+├── frontend/                  # Vite + React
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── auth/       # ProtectedRoute
-│   │   │   ├── layout/     # Navbar, HeroSection, Footer
-│   │   │   ├── property/   # PropertyCard, SearchBar, Filters
-│   │   │   └── ui/         # Skeleton loaders
-│   │   ├── context/        # AuthContext, ThemeContext, WishlistContext
-│   │   ├── i18n/           # EN, HI, GU translations
-│   │   ├── layouts/        # MainLayout
-│   │   ├── pages/          # All page components
-│   │   ├── services/       # Axios API service layer
+│   │   │   ├── auth/ProtectedRoute.jsx
+│   │   │   ├── layout/        # Navbar, HeroSection, Footer
+│   │   │   ├── property/      # PropertyCard, SearchBar, Filters
+│   │   │   └── ui/            # Skeleton loaders
+│   │   ├── context/
+│   │   │   ├── AuthContext.jsx
+│   │   │   ├── ThemeContext.jsx
+│   │   │   └── WishlistContext.jsx
+│   │   ├── pages/
+│   │   │   ├── AuthPage.jsx
+│   │   │   ├── VerifyEmailPage.jsx
+│   │   │   ├── ForgotPasswordPage.jsx
+│   │   │   ├── ResetPasswordPage.jsx
+│   │   │   └── ...
+│   │   ├── utils/
+│   │   │   └── validators.js  # Client-side validation (mirrors backend)
+│   │   ├── services/api.js
+│   │   ├── i18n/
 │   │   ├── App.jsx
 │   │   └── main.jsx
 │   ├── .env.example
-│   ├── package.json
-│   └── vite.config.js
+│   └── README.md
 │
-├── .gitignore
-├── package.json         # Root — concurrent dev scripts
-└── README.md
+├── docs/                      # Detailed documentation
+│   ├── AUTHENTICATION.md
+│   ├── API_DOCUMENTATION.md
+│   ├── PROJECT_STRUCTURE.md
+│   ├── SECURITY.md
+│   └── SETUP_GUIDE.md
+│
+└── README.md                  # ← You are here
 ```
-
----
-
-## 🏠 Features
-
-- **Hero Section** — Full-screen slideshow with Indian housing imagery
-- **Property Listings** — Grid/list view with real-time API filtering
-- **Advanced Filters** — City, type, BHK, budget, furnishing, RERA
-- **Property Detail** — Image gallery, specs, amenities, seller contact
-- **Authentication** — JWT-based login/register with Buyer / Seller roles
-- **Protected Routes** — Role-based access for dashboard and listing
-- **Seller Dashboard** — Real listings fetched from API, stats
-- **Buyer Dashboard** — Wishlist, profile info
-- **Wishlist** — Persisted in localStorage
-- **Dark / Light Mode** — System preference aware, saved in localStorage
-- **Multilingual** — English, Hindi (हिन्दी), Gujarati (ગુજરાતી) via i18next
-- **Image Upload** — Multer-based file upload for property photos
-- **RERA Badge** — Visual indicator for compliant properties
-- **WhatsApp Integration** — Direct WhatsApp link from property detail
-- **Share** — Web Share API with clipboard fallback
 
 ---
 
@@ -82,188 +119,132 @@ ApnaGhar/
 ### Prerequisites
 
 - Node.js 18+
-- MongoDB (local or MongoDB Atlas)
+- MongoDB (local or Atlas)
+- Gmail account (for email verification)
 
-### 1. Clone the Repository
+### 1. Clone
 
 ```bash
 git clone https://github.com/SamirAlam1/ApnaGhar.git
 cd ApnaGhar
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 
 ```bash
-# Install root tools (concurrently)
-npm install
+# Backend
+cd backend && npm install
 
-# Install backend & frontend dependencies
-npm run install:all
+# Frontend
+cd ../frontend && npm install
 ```
 
-### 3. Configure Environment Variables
+### 3. Configure environment
 
-**Backend:**
 ```bash
+# Backend
 cp backend/.env.example backend/.env
-```
+# Edit backend/.env with your values
 
-Edit `backend/.env`:
-```env
-PORT=5000
-NODE_ENV=development
-MONGO_URI=mongodb://localhost:27017/apnaghar
-JWT_SECRET=your_very_long_random_secret_here
-JWT_EXPIRE=7d
-CLIENT_URL=http://localhost:5173
-```
-
-**Frontend:**
-```bash
+# Frontend
 cp frontend/.env.example frontend/.env
 ```
 
-Edit `frontend/.env`:
-```env
-VITE_API_URL=http://localhost:5000/api
-```
-
-> When deploying, set `VITE_API_URL` to your production API URL (e.g. Render).
-
-### 4. Run in Development
+### 4. Run development servers
 
 ```bash
-npm run dev
-```
+# Backend (http://localhost:5000)
+cd backend && npm run dev
 
-- Frontend: [http://localhost:5173](http://localhost:5173)
-- Backend API: [http://localhost:5000/api](http://localhost:5000/api)
-- Health check: [http://localhost:5000/health](http://localhost:5000/health)
-
----
-
-## 🗄️ MongoDB Schemas
-
-### User
-```
-{ name, email, password (hashed), phone, role: 'buyer|seller|admin', avatar, isVerified, savedSearches }
-```
-
-### Property
-```
-{
-  title, description, city, locality, address, pincode,
-  price, listingType: 'sale|rent', propertyType: 'Flat|Villa|PG|Plot',
-  bhk, bathrooms, area, furnishing, reraApproved, reraNumber,
-  amenities[], images[], seller (ref: User),
-  isActive, isFeatured, views, aiScore, tags[]
-}
-```
-
-### Review
-```
-{ property (ref), user (ref), rating (1-5), comment }
+# Frontend (http://localhost:5173)
+cd frontend && npm run dev
 ```
 
 ---
 
-## 🌐 API Endpoints
+## 🔑 Environment Variables
 
-| Method | Endpoint                  | Auth        | Description            |
-|--------|---------------------------|-------------|------------------------|
-| POST   | /api/auth/register        | Public      | Register new user      |
-| POST   | /api/auth/login           | Public      | Login                  |
-| GET    | /api/auth/me              | Bearer JWT  | Get current profile    |
-| GET    | /api/properties           | Public      | List with filters      |
-| GET    | /api/properties/featured  | Public      | Featured listings      |
-| GET    | /api/properties/mine      | Seller      | My listings            |
-| GET    | /api/properties/:id       | Public      | Property detail        |
-| POST   | /api/properties           | Seller      | Create listing         |
-| PUT    | /api/properties/:id       | Seller      | Update listing         |
-| DELETE | /api/properties/:id       | Seller      | Delete listing         |
+### Backend (`backend/.env`)
 
-### Query Parameters for GET /api/properties
+| Variable | Required | Description |
+|---|---|---|
+| `NODE_ENV` | Yes | `development` or `production` |
+| `PORT` | No | Server port (default: 5000) |
+| `MONGO_URI` | Yes | MongoDB connection string |
+| `JWT_SECRET` | Yes | Min 64-char random string |
+| `JWT_EXPIRE` | No | Token lifetime (default: 7d) |
+| `CLIENT_URL` | Yes | Frontend URL (for CORS + email links) |
+| `SMTP_HOST` | Yes* | SMTP host (e.g. smtp.gmail.com) |
+| `SMTP_PORT` | Yes* | SMTP port (587 for TLS) |
+| `SMTP_USER` | Yes* | Gmail address |
+| `SMTP_PASS` | Yes* | Gmail App Password |
+| `EMAIL_FROM` | No | Sender display name + email |
 
-| Param       | Type    | Description                                |
-|-------------|---------|--------------------------------------------|
-| city        | string  | Filter by city                             |
-| type        | string  | Filter by property type (Flat/Villa/PG/Plot) |
-| bhk         | number  | Filter by BHK count                       |
-| furnishing  | string  | Furnished / Semi-Furnished / Unfurnished  |
-| rera        | boolean | true = RERA approved only                 |
-| minPrice    | number  | Minimum price                              |
-| maxPrice    | number  | Maximum price                              |
-| q           | string  | Full-text search                           |
-| sort        | string  | price_asc / price_desc / newest / default  |
-| page        | number  | Page number (default: 1)                   |
-| limit       | number  | Results per page (default: 12, max: 50)    |
+*Required for email verification. Without SMTP config, verification emails are skipped (development mode).
+
+### Frontend (`frontend/.env`)
+
+| Variable | Required | Description |
+|---|---|---|
+| `VITE_API_URL` | Yes | Backend API URL (e.g. http://localhost:5000/api) |
+
+---
+
+## 🌐 API Overview
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| POST | `/api/auth/register` | Public | Register new user |
+| POST | `/api/auth/login` | Public | Login |
+| GET | `/api/auth/verify-email/:token` | Public | Verify email address |
+| POST | `/api/auth/resend-verification` | Public | Resend verification email |
+| POST | `/api/auth/forgot-password` | Public | Request password reset |
+| POST | `/api/auth/reset-password/:token` | Public | Reset password |
+| GET | `/api/auth/me` | Bearer JWT | Get current user profile |
+| GET | `/api/properties` | Public | List properties with filters |
+| GET | `/api/properties/:id` | Public | Property detail |
+| POST | `/api/properties` | Seller JWT | Create listing |
+| PUT | `/api/properties/:id` | Seller JWT | Update listing |
+| DELETE | `/api/properties/:id` | Seller JWT | Delete listing |
+
+See `docs/API_DOCUMENTATION.md` for full request/response schemas.
+
+---
+
+## 🔒 Security Highlights
+
+- Passwords hashed with bcrypt (12 rounds)
+- JWT tokens expire in 7 days
+- Brute-force protection: 5 failed logins → 30-min account lock
+- Rate limiting: 20 auth requests / 15 min, 5 registrations / hour per IP
+- Email verification via SHA-256 hashed tokens (24-hour expiry)
+- Disposable email domains blocked (30+ providers)
+- Indian phone number validation with fake-sequence detection
+- Input sanitisation (HTML tag stripping, null-byte removal)
+- Helmet security headers
+- CORS restricted to configured client URL
+
+See `docs/SECURITY.md` for details.
 
 ---
 
 ## 🚀 Deployment
 
-### Frontend — Vercel
+### Frontend → Vercel
 
 ```bash
 cd frontend && npm run build
 # Connect GitHub repo to Vercel
-# Build command: npm run build
-# Output dir: dist
-# Root dir: frontend
+# Set: VITE_API_URL=https://your-api.onrender.com/api
 ```
 
-Set environment variable in Vercel dashboard:
-```
-VITE_API_URL=https://your-api.onrender.com/api
-```
-
-### Backend — Render
+### Backend → Render
 
 ```
 Build Command: npm install
 Start Command: node server.js
-Root Directory: backend
+Environment Variables: NODE_ENV, MONGO_URI, JWT_SECRET, CLIENT_URL, SMTP_*
 ```
-
-Set environment variables in Render dashboard:
-```
-NODE_ENV=production
-MONGO_URI=mongodb+srv://...
-JWT_SECRET=...
-CLIENT_URL=https://your-app.vercel.app
-```
-
----
-
-## 🎨 Design Tokens
-
-| Token         | Value       |
-|---------------|-------------|
-| Primary Blue  | `#1E40AF`   |
-| Teal          | `#0D9488`   |
-| Purple        | `#7C3AED`   |
-| Charcoal      | `#1F2937`   |
-| Display Font  | Playfair Display |
-| Body Font     | DM Sans     |
-
----
-
-## 📍 Supported Cities
-
-Mumbai · Delhi · Bangalore · Ahmedabad · Vadodara
-
----
-
-## 🗺️ Roadmap
-
-- [ ] Cloudinary image uploads
-- [ ] Google Maps property location embed
-- [ ] Email verification (Nodemailer)
-- [ ] EMI calculator widget
-- [ ] Admin dashboard
-- [ ] WhatsApp Business API
-- [ ] Push notifications (PWA)
-- [ ] AI property recommendation engine
 
 ---
 
