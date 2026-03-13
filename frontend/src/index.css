@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    @apply bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-blue-700 to-teal-600 text-white font-semibold rounded-xl
+           hover:scale-105 hover:shadow-lg transition-all duration-200 cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 border-2 border-white text-white font-semibold rounded-xl
+           hover:bg-white hover:text-blue-800 transition-all duration-200 cursor-pointer;
+  }
+
+  .btn-outline {
+    @apply px-6 py-3 border-2 border-blue-700 text-blue-700 dark:border-blue-400 dark:text-blue-400
+           font-semibold rounded-xl hover:bg-blue-700 hover:text-white transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700
+           bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+           focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200;
+  }
+
+  .shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .dark .shimmer {
+    background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+    background-size: 200% 100%;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #1E40AF, #0D9488);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass {
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .hero-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 64, 175, 0.75) 0%,
+      rgba(13, 148, 136, 0.65) 50%,
+      rgba(124, 58, 237, 0.55) 100%
+    );
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { @apply bg-gray-100 dark:bg-gray-900; }
+::-webkit-scrollbar-thumb { @apply bg-blue-400 rounded-full; }
