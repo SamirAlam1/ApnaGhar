@@ -222,16 +222,19 @@ export default function HomePage() {
       </section>
 
       {/* Why ApnaGhar */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <SectionTitle
-          badge="⭐ Why Us"
-          title="Why Choose ApnaGhar?"
-          subtitle="We're not just a listing platform — we're your trusted property partner"
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {WHY_US.map((item, i) => <WhyUsCard key={item.title} {...item} index={i} />)}
-        </div>
-      </section>
+<section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+  <SectionTitle
+    badge="⭐ Why Us"
+    title="Why Choose ApnaGhar?"
+    subtitle="We're not just a listing platform — we're your trusted property partner"
+  />
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {WHY_US.map((item, i) => (
+      <WhyUsCard key={item.title} {...item} index={i} />
+    ))}
+  </div>
+</section>
 
       {/* CTA Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
