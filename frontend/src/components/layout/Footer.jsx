@@ -141,8 +141,8 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-600">
+        <div className="border-t border-gray-300 dark:border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-gray-500 dark:text-gray-600">
             © 2025 ApnaGhar by Samir Alam. Made with ❤️ in India 🇮🇳
           </p>
 
@@ -151,7 +151,7 @@ export default function Footer() {
               <Building2 size={12} /> RERA Registered Platform
             </span>
 
-            <span className="w-1 h-1 rounded-full bg-gray-700"></span>
+            <span className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-700"></span>
 
             <span>MahaRERA | DDA | RERA GJ</span>
           </div>
