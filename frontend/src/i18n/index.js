@@ -18,7 +18,7 @@ const resources = {
         listProperty: 'List Property',
       },
       hero: {
-        heading: 'Find Your Dream Home with AI',
+        heading: 'Find Your Dream Home',
         subheading: 'Smart, Secure & Personalized Property Search Across India',
         explore: 'Explore Properties',
         list: 'List Your Property',
