@@ -18,7 +18,7 @@ const CITIES_DATA = [
 ];
 
 const WHY_US = [
-  { icon: '🤖', title: 'AI-Powered Recommendations', desc: "Our AI learns your preferences and shows properties you'll love." },
+  { icon: '🔍', title: 'Smart Recommendations', desc: "Find properties matching your preferences across top Indian cities." },
   { icon: '✅', title: 'RERA Verified Listings',      desc: 'All properties are verified for RERA compliance and legal safety.' },
   { icon: '🔍', title: 'Smart Filters',               desc: 'Filter by BHK, budget, city, furnishing, amenities and more.' },
   { icon: '💬', title: 'Direct Seller Connect',       desc: 'Contact sellers directly — no middlemen, no hidden charges.' },
@@ -187,7 +187,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* AI Banner */}
+      {/* Smart Banner */
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <motion.div
@@ -205,16 +205,16 @@ export default function HomePage() {
                 <Sparkles size={14} /> Powered by Artificial Intelligence
               </span>
               <h2 className="font-display font-bold text-3xl sm:text-5xl mb-4">
-                Let AI Find Your<br />Perfect Home
+                Let Us Find Your<br />Perfect Home
               </h2>
               <p className="text-white/80 text-lg mb-8 max-w-lg mx-auto">
-                Tell us your preferences — budget, city, BHK — and our AI will curate the best matching properties for you.
+                Tell us your preferences — budget, city, BHK — and we will show the best matching properties for you.
               </p>
               <Link
                 to="/properties"
                 className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-white text-blue-800 font-bold hover:shadow-2xl hover:scale-105 transition-all"
               >
-                <TrendingUp size={18} /> Try AI Search
+                <TrendingUp size={18} /> Try Smart Search
               </Link>
             </div>
           </motion.div>
