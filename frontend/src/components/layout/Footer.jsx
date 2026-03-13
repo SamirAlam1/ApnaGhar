@@ -50,18 +50,17 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <img src="/logo.svg" alt="ApnaGhar Logo" className="h-9 w-9 drop-shadow-md" />
-              <span className="font-display font-bold text-xl text-white">
+              <img src="/logo.svg" alt="ApnaGhar Logo" className="h-9 w-9" />
+              <span className="font-bold text-xl text-white">
                 Apna<span className="text-teal-400">Ghar</span>
               </span>
             </div>
 
-            <p className="text-sm mb-5 leading-relaxed">
-              India's smart real estate marketplace. Find verified properties
-              across top Indian cities.
+            <p className="text-sm mb-5">
+              India's smart real estate marketplace. Find verified
+              properties across top Indian cities.
             </p>
 
-            {/* Social Icons */}
             <div className="flex gap-3 flex-wrap">
               {SOCIAL_LINKS.map(({ icon: Icon, href, label, hover }) => (
                 <a
@@ -69,7 +68,7 @@ export default function Footer() {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center transition-colors ${hover}`}
+                  className={`w-8 h-8 rounded-lg bg-gray-800 flex items-center justify-center ${hover}`}
                 >
                   <Icon size={14} />
                 </a>
@@ -87,7 +86,7 @@ export default function Footer() {
                 <li key={city}>
                   <Link
                     to={`/properties?city=${city}`}
-                    className="text-sm hover:text-teal-400 transition-colors"
+                    className="text-sm hover:text-teal-400"
                   >
                     {city}
                   </Link>
@@ -106,7 +105,7 @@ export default function Footer() {
                 <li key={type}>
                   <Link
                     to={`/properties?type=${type}`}
-                    className="text-sm hover:text-teal-400 transition-colors"
+                    className="text-sm hover:text-teal-400"
                   >
                     {type}
                   </Link>
@@ -123,8 +122,6 @@ export default function Footer() {
             <ul className="space-y-2">
               {[
                 ["About", "/about"],
-                ["Careers", "#"],
-                ["Blog", "#"],
                 ["Contact", "/contact"],
                 ["Privacy Policy", "#"],
                 ["Terms", "#"],
@@ -132,7 +129,7 @@ export default function Footer() {
                 <li key={label}>
                   <Link
                     to={link}
-                    className="text-sm hover:text-teal-400 transition-colors"
+                    className="text-sm hover:text-teal-400"
                   >
                     {label}
                   </Link>
@@ -143,9 +140,8 @@ export default function Footer() {
 
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom */}
         <div className="border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-
           <p className="text-xs text-gray-600">
             © 2025 ApnaGhar. Made with ❤️ in India 🇮🇳
           </p>
@@ -159,7 +155,6 @@ export default function Footer() {
 
             <span>MahaRERA | DDA | RERA GJ</span>
           </div>
-
         </div>
 
       </div>
