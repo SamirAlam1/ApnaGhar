@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import {
   Building2,
   Instagram,
-  Twitter,import { Link } from "react-router-dom";
+  Twitter,
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Building2, Instagram, Twitter, Linkedin, Facebook, Github } from "lucide-react";
 
