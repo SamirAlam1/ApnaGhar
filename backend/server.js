@@ -9,6 +9,9 @@ const connectDB  = require('./config/db');
 
 const app = express();
 
+// ── Trust proxy (REQUIRED for Render — fixes rate-limit X-Forwarded-For error) ─
+app.set('trust proxy', 1);
+
 // ── Connect to MongoDB ────────────────────────────────────────────────────────
 connectDB();
 
@@ -28,6 +31,7 @@ app.use(
 );
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
+// Allow: exact CLIENT_URL + all *.vercel.app preview deployments
 const allowedOrigins = (process.env.CLIENT_URL || 'https://apna-ghar-finder.vercel.app')
   .split(',')
   .map((o) => o.trim());
@@ -35,8 +39,14 @@ const allowedOrigins = (process.env.CLIENT_URL || 'https://apna-ghar-finder.verc
 app.use(
   cors({
     origin: (origin, cb) => {
-      // Allow requests with no origin (mobile apps, curl, Postman in dev)
-      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      // Allow no-origin requests (Postman, curl, mobile)
+      if (!origin) return cb(null, true);
+      // Allow exact matches from env
+      if (allowedOrigins.includes(origin)) return cb(null, true);
+      // Allow all Vercel preview deployments (*.vercel.app)
+      if (origin.endsWith('.vercel.app')) return cb(null, true);
+      // Allow localhost in development
+      if (origin.startsWith('http://localhost:')) return cb(null, true);
       cb(new Error(`CORS: origin ${origin} not allowed`));
     },
     credentials: true,
@@ -49,7 +59,7 @@ app.use(
 app.use(
   '/api',
   rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 15 * 60 * 1000,
     max: 300,
     standardHeaders: true,
     legacyHeaders: false,
@@ -57,28 +67,28 @@ app.use(
   })
 );
 
-// Strict limiter on auth endpoints (prevent brute-force / credential stuffing)
+// Strict limiter on auth endpoints
 app.use(
   '/api/auth',
   rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 20,                   // 20 auth requests per 15 min per IP
+    windowMs: 15 * 60 * 1000,
+    max: 20,
     standardHeaders: true,
     legacyHeaders: false,
     message: {
       success: false,
       message: 'Too many authentication attempts — please try again in 15 minutes.',
     },
-    skip: (req) => req.method === 'GET', // don't limit /api/auth/me
+    skip: (req) => req.method === 'GET',
   })
 );
 
-// Very strict limiter on registration (prevent mass account creation)
+// Strict limiter on registration
 app.use(
   '/api/auth/register',
   rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
-    max: 5,                    // 5 registrations per hour per IP
+    windowMs: 60 * 60 * 1000,
+    max: 5,
     message: {
       success: false,
       message: 'Too many registration attempts — please try again in 1 hour.',
@@ -87,7 +97,7 @@ app.use(
 );
 
 // ── Body parsing ──────────────────────────────────────────────────────────────
-app.use(express.json({ limit: '2mb' }));          // tightened from 10mb
+app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
 // ── Static assets ─────────────────────────────────────────────────────────────
