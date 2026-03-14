@@ -11,7 +11,7 @@
 
 ## 📋 Project Description
 
-ApnaGhar is a full-stack MERN real estate marketplace targeting the Indian market. It features AI-powered property recommendations, multi-language support (English, Hindi, Gujarati), RERA-verified listings, and a secure, production-ready authentication system.
+ApnaGhar is a full-stack MERN real estate marketplace targeting the Indian market. It features smart property recommendations, multi-language support (English, Hindi, Gujarati), RERA-verified listings, and a secure, production-ready authentication system.
 
 ---
 
