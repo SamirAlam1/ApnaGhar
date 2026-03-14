@@ -1,6 +1,6 @@
-# 🏡 ApnaGhar — AI-Powered Indian Real Estate Marketplace
+# 🏡 ApnaGhar — Smart Indian Real Estate Marketplace
 
-> India's smartest property search platform — Powered by AI, trusted by 50,000+ families.
+> India's smartest property search platform, trusted by 50,000+ families.
 
 [![Node](https://img.shields.io/badge/Node-18%2B-green)](https://nodejs.org)
 [![React](https://img.shields.io/badge/React-18-blue)](https://react.dev)
