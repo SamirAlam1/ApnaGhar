@@ -6,7 +6,6 @@ import {
   Home,
   Building2,
   Heart,
-  User,
   LogOut,
   Sun,
   Moon,
@@ -40,6 +39,11 @@ export default function Navbar() {
   const langRef = useRef(null);
   const userRef = useRef(null);
 
+  // Only homepage gets transparent navbar
+  const isHome = location.pathname === "/";
+  // Navbar is "solid" when: scrolled, dark mode, OR not on homepage
+  const solid = scrolled || dark || !isHome;
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
@@ -71,7 +75,7 @@ export default function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
+        solid
           ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-100 dark:border-gray-800"
           : "bg-transparent"
       }`}
@@ -87,7 +91,7 @@ export default function Navbar() {
             />
             <span
               className={`font-display font-bold text-xl transition-colors ${
-                scrolled || dark
+                solid
                   ? "text-gray-900 dark:text-white"
                   : "text-white"
               }`}
@@ -105,7 +109,7 @@ export default function Navbar() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   isActive(to)
                     ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
-                    : scrolled || dark
+                    : solid
                       ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                       : "text-white/90 hover:text-white hover:bg-white/10"
                 }`}
@@ -122,7 +126,7 @@ export default function Navbar() {
               <button
                 onClick={() => setLangOpen(!langOpen)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                  scrolled || dark
+                  solid
                     ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     : "text-white/90 hover:bg-white/10"
                 }`}
@@ -170,7 +174,7 @@ export default function Navbar() {
             <button
               onClick={toggle}
               className={`p-2 rounded-lg transition-all ${
-                scrolled || dark
+                solid
                   ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                   : "text-white/90 hover:bg-white/10"
               }`}
@@ -183,7 +187,7 @@ export default function Navbar() {
               <Link
                 to="/wishlist"
                 className={`relative p-2 rounded-lg transition-all ${
-                  scrolled || dark
+                  solid
                     ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     : "text-white/90 hover:bg-white/10"
                 }`}
@@ -283,7 +287,7 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    scrolled || dark
+                    solid
                       ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                       : "text-white/90 hover:bg-white/10"
                   }`}
@@ -304,7 +308,7 @@ export default function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className={`md:hidden p-2 rounded-lg transition-colors ${
-              scrolled || dark
+              solid
                 ? "text-gray-700 dark:text-gray-300"
                 : "text-white"
             }`}
@@ -344,7 +348,11 @@ export default function Navbar() {
                     <button
                       key={l.code}
                       onClick={() => i18n.changeLanguage(l.code)}
-                      className={`px-2 py-1 rounded-lg text-xs font-medium ${i18n.language === l.code ? "bg-blue-100 text-blue-700" : "text-gray-500"}`}
+                      className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                        i18n.language === l.code
+                          ? "bg-blue-100 text-blue-700"
+                          : "text-gray-500"
+                      }`}
                     >
                       {l.flag}
                     </button>
