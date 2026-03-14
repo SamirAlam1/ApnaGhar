@@ -1,15 +1,15 @@
 /**
  * backend/utils/email.js
  *
- * Email sender using Nodemailer with Gmail SMTP (free).
+ * Email sender using Nodemailer with Mailtrap SMTP.
  *
  * Required .env variables:
- *   SMTP_HOST     – e.g. smtp.gmail.com
- *   SMTP_PORT     – e.g. 587
- *   SMTP_USER     – your Gmail address
- *   SMTP_PASS     – Gmail App Password (not your account password)
- *   EMAIL_FROM    – e.g. "ApnaGhar <noreply@gmail.com>"
- *   CLIENT_URL    – e.g. http://localhost:5173 (for links in emails)
+ *   SMTP_HOST     – live.smtp.mailtrap.io
+ *   SMTP_PORT     – 587
+ *   SMTP_USER     – api
+ *   SMTP_PASS     – your Mailtrap API token
+ *   EMAIL_FROM    – "ApnaGhar <hello@demomailtrap.co>"
+ *   CLIENT_URL    – https://apna-ghar-finder.vercel.app
  */
 
 const nodemailer = require('nodemailer');
@@ -21,12 +21,15 @@ function getTransporter() {
   if (transporter) return transporter;
 
   transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.SMTP_PORT || '465', 10),
-    secure: true, // SSL required for Gmail on Render
+    host: process.env.SMTP_HOST || 'live.smtp.mailtrap.io',
+    port: parseInt(process.env.SMTP_PORT || '587', 10),
+    secure: false,
     auth: {
-      user: process.env.SMTP_USER,
+      user: process.env.SMTP_USER || 'api',
       pass: process.env.SMTP_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 
@@ -48,8 +51,6 @@ function htmlWrapper(title, bodyHtml) {
     <tr>
       <td align="center">
         <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
-
-          <!-- Header -->
           <tr>
             <td style="background:linear-gradient(135deg,#1e40af,#0d9488);padding:32px;text-align:center;">
               <h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:-0.5px;">
@@ -60,15 +61,11 @@ function htmlWrapper(title, bodyHtml) {
               </p>
             </td>
           </tr>
-
-          <!-- Body -->
           <tr>
             <td style="padding:36px 40px;">
               ${bodyHtml}
             </td>
           </tr>
-
-          <!-- Footer -->
           <tr>
             <td style="background:#f9fafb;padding:24px 40px;text-align:center;border-top:1px solid #e5e7eb;">
               <p style="margin:0;color:#9ca3af;font-size:12px;">
@@ -79,7 +76,6 @@ function htmlWrapper(title, bodyHtml) {
               </p>
             </td>
           </tr>
-
         </table>
       </td>
     </tr>
@@ -114,7 +110,7 @@ async function sendVerificationEmail(to, name, rawToken) {
     </p>`;
 
   await getTransporter().sendMail({
-    from: process.env.EMAIL_FROM || '"ApnaGhar" <noreply@apnaghar.in>',
+    from: process.env.EMAIL_FROM || '"ApnaGhar" <hello@demomailtrap.co>',
     to,
     subject: '✅ Verify your ApnaGhar account',
     html: htmlWrapper('Verify Email — ApnaGhar', body),
@@ -151,7 +147,7 @@ async function sendPasswordResetEmail(to, name, rawToken) {
     </p>`;
 
   await getTransporter().sendMail({
-    from: process.env.EMAIL_FROM || '"ApnaGhar" <noreply@apnaghar.in>',
+    from: process.env.EMAIL_FROM || '"ApnaGhar" <hello@demomailtrap.co>',
     to,
     subject: '🔐 Reset your ApnaGhar password',
     html: htmlWrapper('Reset Password — ApnaGhar', body),
@@ -169,8 +165,8 @@ async function sendWelcomeEmail(to, name) {
       You can now access all features of India's most trusted real estate platform.
     </p>
     <ul style="color:#4b5563;font-size:14px;line-height:2;padding-left:20px;margin:0 0 24px;">
-      <li>🏠 Browse 10,000+ verified properties</li>
-      <li>🤖 AI-powered property recommendations</li>
+      <li>🏠 Browse verified properties across India</li>
+      <li>🔍 Smart property recommendations</li>
       <li>🔖 Save properties to your wishlist</li>
       <li>📞 Connect directly with sellers</li>
     </ul>
@@ -184,7 +180,7 @@ async function sendWelcomeEmail(to, name) {
     </div>`;
 
   await getTransporter().sendMail({
-    from: process.env.EMAIL_FROM || '"ApnaGhar" <noreply@apnaghar.in>',
+    from: process.env.EMAIL_FROM || '"ApnaGhar" <hello@demomailtrap.co>',
     to,
     subject: '🎉 Welcome to ApnaGhar — Your account is ready!',
     html: htmlWrapper('Welcome to ApnaGhar', body),
