@@ -55,23 +55,23 @@ npm run preview
 ```
 frontend/src/
 │
-├── App.jsx                    # Routes
-├── main.jsx                   # React entry point
-├── index.css                  # Tailwind + global styles
+├── App.jsx                     # Routes
+├── main.jsx                    # React entry point
+├── index.css                   # Tailwind + global styles
 │
 ├── utils/
-│   └── validators.js          # Email, password, phone, name validators
+│   └── validators.js           # Email, password, phone, name validators
 │
 ├── context/
-│   ├── AuthContext.jsx        # Auth state + API calls
-│   ├── ThemeContext.jsx       # Dark/light mode
-│   └── WishlistContext.jsx    # Wishlist state
+│   ├── AuthContext.jsx         # Auth state + API calls
+│   ├── ThemeContext.jsx        # Dark/light mode
+│   └── WishlistContext.jsx     # Wishlist state
 │
 ├── pages/
-│   ├── AuthPage.jsx           # Login + register form
-│   ├── VerifyEmailPage.jsx    # /verify-email/:token
-│   ├── ForgotPasswordPage.jsx # /forgot-password
-│   ├── ResetPasswordPage.jsx  # /reset-password/:token
+│   ├── AuthPage.jsx            # Login + register form
+│   ├── VerifyEmailPage.jsx     # /verify-email/:token
+│   ├── ForgotPasswordPage.jsx  # /forgot-password
+│   ├── ResetPasswordPage.jsx   # /reset-password/:token
 │   ├── HomePage.jsx
 │   ├── PropertiesPage.jsx
 │   ├── PropertyDetailPage.jsx
@@ -82,18 +82,18 @@ frontend/src/
 │
 ├── components/
 │   ├── auth/ProtectedRoute.jsx
-│   ├── layout/               # Navbar, HeroSection, Footer
-│   ├── property/             # PropertyCard, SearchBar, Filters
-│   └── ui/                   # Skeleton loaders
+│   ├── layout/                 # Navbar, HeroSection, Footer
+│   ├── property/               # PropertyCard, SearchBar, Filters
+│   └── ui/                     # Skeleton loaders
 │
 ├── layouts/
 │   └── MainLayout.jsx
 │
 ├── services/
-│   └── api.js                # Axios instance + service methods
+│   └── api.js                  # Axios instance + service methods
 │
 └── i18n/
-    └── index.js              # Translation strings (EN/HI/GU)
+    └── index.js                # Translation strings (EN/HI/GU)
 ```
 
 ---
@@ -102,6 +102,7 @@ frontend/src/
 
 1. **Register** → `AuthPage` (mode="register")
    - Real-time validation as user types (after field is touched)
+   - Password strength meter (4-bar indicator)
    - Submit button disabled until form is fully valid
    - After success → shows "Check your inbox" banner
 
@@ -135,8 +136,33 @@ All validation rules match the backend exactly:
 
 ---
 
+## Navbar Behaviour
+
+- **Home page** — transparent navbar, white text (over hero image)
+- **All other pages** — solid white/dark navbar with full visibility
+- Dark mode toggle available on all pages
+- Language switcher (EN / HI)
+
+---
+
 ## Environment Variables
 
 | Variable | Required | Description |
 |---|---|---|
 | `VITE_API_URL` | Yes | Backend API base URL |
+
+---
+
+## Deployment (Vercel)
+
+```
+Root Directory:   frontend
+Framework:        Vite
+Build Command:    node ./node_modules/vite/bin/vite.js build
+Output Directory: dist
+Env:              VITE_API_URL=https://apnaghar-backend.onrender.com/api
+```
+
+---
+
+Made with ❤️ in India 🇮🇳 | ApnaGhar © 2025
