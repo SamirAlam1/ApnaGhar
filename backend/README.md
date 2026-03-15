@@ -2,15 +2,22 @@
 
 Node.js + Express REST API for the ApnaGhar real estate platform.
 
+---
+
 ## Tech Stack
 
-- **Runtime:** Node.js 18+
-- **Framework:** Express 4
-- **Database:** MongoDB + Mongoose
-- **Auth:** JWT + bcrypt (12 rounds)
-- **Email:** Nodemailer + Gmail SMTP (free)
-- **Security:** Helmet, CORS, express-rate-limit
-- **Validation:** Custom middleware (no external validation library)
+| Package            | Version | Purpose                          |
+|--------------------|---------|----------------------------------|
+| Node.js            | 18+     | Runtime                          |
+| Express            | 4       | Web framework                    |
+| MongoDB + Mongoose | 8       | Database + ODM                   |
+| bcryptjs           | 2.4     | Password hashing (12 rounds)     |
+| jsonwebtoken       | 9       | JWT auth tokens                  |
+| Nodemailer         | 6.9     | Email sending (Mailtrap SMTP)    |
+| Helmet             | 8       | Security HTTP headers            |
+| express-rate-limit | 7       | Rate limiting + brute-force      |
+| cors               | 2.8     | Cross-origin resource sharing    |
+| morgan             | 1.10    | HTTP request logging (dev only)  |
 
 ---
 
@@ -21,7 +28,7 @@ cd backend
 npm install
 cp .env.example .env
 # Edit .env with your values
-npm run dev
+node server.js
 ```
 
 Server starts on `http://localhost:5000`
@@ -30,60 +37,74 @@ Server starts on `http://localhost:5000`
 
 ## Environment Variables
 
-See `.env.example` for all variables. Required:
-
-| Variable | Description |
-|---|---|
-| `MONGO_URI` | MongoDB connection string |
-| `JWT_SECRET` | 64+ char random secret for signing JWTs |
-| `CLIENT_URL` | Frontend URL for CORS + email links |
-| `SMTP_USER` | Gmail address |
-| `SMTP_PASS` | Gmail App Password (16 chars, from Google Account Security) |
+| Variable     | Required | Description                                        |
+|--------------|----------|----------------------------------------------------|
+| `MONGO_URI`  | Yes      | MongoDB connection string (Atlas or local)         |
+| `JWT_SECRET` | Yes      | 64+ char random secret for signing JWTs            |
+| `JWT_EXPIRE` | Yes      | Token expiry (e.g. `7d`)                           |
+| `CLIENT_URL` | Yes      | Frontend URL for CORS + email links                |
+| `SMTP_HOST`  | Yes      | SMTP host (e.g. `live.smtp.mailtrap.io`)           |
+| `SMTP_PORT`  | Yes      | SMTP port (e.g. `587`)                             |
+| `SMTP_USER`  | Yes      | SMTP username (e.g. `api` for Mailtrap)            |
+| `SMTP_PASS`  | Yes      | SMTP password / API token                          |
+| `EMAIL_FROM` | Yes      | Sender name + email (e.g. `ApnaGhar <hello@...>`) |
+| `PORT`       | No       | Server port (default: `5000`)                      |
+| `NODE_ENV`   | No       | `development` or `production`                      |
 
 ---
 
 ## API Endpoints
 
-### Auth
+### Authentication
 
-| Method | Route | Description |
-|---|---|---|
-| POST | `/api/auth/register` | Register user (email verified via link) |
-| POST | `/api/auth/login` | Login |
-| GET | `/api/auth/verify-email/:token` | Verify email |
-| POST | `/api/auth/resend-verification` | Resend verification email |
-| POST | `/api/auth/forgot-password` | Request password reset |
-| POST | `/api/auth/reset-password/:token` | Reset password |
-| GET | `/api/auth/me` | Get profile (JWT required) |
+| Method | Route                             | Auth       | Description                   |
+|--------|-----------------------------------|------------|-------------------------------|
+| POST   | `/api/auth/register`              | Public     | Register + send verify email  |
+| POST   | `/api/auth/login`                 | Public     | Login with JWT response       |
+| GET    | `/api/auth/verify-email/:token`   | Public     | Verify email address          |
+| POST   | `/api/auth/resend-verification`   | Public     | Resend verification email     |
+| POST   | `/api/auth/forgot-password`       | Public     | Send password reset email     |
+| POST   | `/api/auth/reset-password/:token` | Public     | Reset password                |
+| GET    | `/api/auth/me`                    | Bearer JWT | Get current user profile      |
 
 ### Properties
 
-| Method | Route | Auth | Description |
-|---|---|---|---|
-| GET | `/api/properties` | Public | List with filters |
-| GET | `/api/properties/featured` | Public | Featured listings |
-| GET | `/api/properties/mine` | Seller | My listings |
-| GET | `/api/properties/:id` | Public | Property detail |
-| POST | `/api/properties` | Seller | Create listing |
-| PUT | `/api/properties/:id` | Seller | Update listing |
-| DELETE | `/api/properties/:id` | Seller | Delete listing |
+| Method | Route                      | Auth   | Description       |
+|--------|----------------------------|--------|-------------------|
+| GET    | `/api/properties`          | Public | List with filters |
+| GET    | `/api/properties/featured` | Public | Featured listings |
+| GET    | `/api/properties/mine`     | Seller | My listings       |
+| GET    | `/api/properties/:id`      | Public | Property detail   |
+| POST   | `/api/properties`          | Seller | Create listing    |
+| PUT    | `/api/properties/:id`      | Seller | Update listing    |
+| DELETE | `/api/properties/:id`      | Seller | Delete listing    |
 
-See `../docs/API_DOCUMENTATION.md` for full request/response schemas.
+### Health Check
+
+| Method | Route     | Description            |
+|--------|-----------|------------------------|
+| GET    | `/health` | Server + uptime status |
 
 ---
 
 ## Security Practices
 
-- All inputs sanitised (HTML stripped, null bytes removed) in `middleware/validate.js`
-- Email format validated with strict regex; 30+ disposable domains blocked
-- Passwords require 8+ chars, uppercase, lowercase, digit
-- Phone numbers validated for Indian format; fake sequences blocked
-- Brute-force protection: 5 failed logins → 30-min account lock
-- Email verification tokens hashed with SHA-256 (raw token sent only in email)
-- Rate limiting: 20 auth requests / 15 min / IP; 5 registrations / hour / IP
-- Helmet headers, CORS restricted to CLIENT_URL
-
-See `../docs/SECURITY.md` for full details.
+| Feature                  | Implementation                                            |
+|--------------------------|-----------------------------------------------------------|
+| Input sanitisation       | HTML stripped, null bytes removed in `validate.js`        |
+| Email validation         | Strict regex + 30+ disposable domains blocked             |
+| Password policy          | Min 8 chars, uppercase + lowercase + digit required       |
+| Phone validation         | Indian format regex + fake sequence blocklist             |
+| Password hashing         | bcrypt with 12 salt rounds                                |
+| Brute-force protection   | 5 failed logins → 30-min account lock                     |
+| Email token security     | SHA-256 hashed tokens; raw token only sent in email       |
+| JWT security             | Signed with 64+ char secret, 7-day expiry                 |
+| Rate limiting (global)   | 300 requests / 15 min / IP                                |
+| Rate limiting (auth)     | 20 requests / 15 min / IP                                 |
+| Rate limiting (register) | 5 requests / hour / IP                                    |
+| CORS                     | Restricted to `CLIENT_URL` + `*.vercel.app` preview URLs  |
+| HTTP headers             | Helmet with strict CSP                                    |
+| Trust proxy              | Enabled for Render reverse proxy                          |
 
 ---
 
@@ -91,25 +112,49 @@ See `../docs/SECURITY.md` for full details.
 
 ```
 backend/
-├── controllers/
-│   ├── authController.js     # Auth business logic
-│   └── propertyController.js
-├── middleware/
-│   ├── auth.js               # JWT protect + authorize
-│   └── validate.js           # Input sanitisation + validation
-├── models/
-│   ├── User.js               # User schema with validators
-│   ├── Property.js
-│   └── Review.js
-├── routes/
-│   ├── auth.js               # Auth routes (with validate middleware)
-│   └── properties.js
-├── utils/
-│   ├── email.js              # Nodemailer Gmail SMTP sender
-│   └── response.js           # sendSuccess / sendError
 ├── config/
-│   └── db.js                 # MongoDB connect
-├── server.js
+│   └── db.js                  # MongoDB connection
+├── controllers/
+│   ├── authController.js      # register, login, verify, reset
+│   └── propertyController.js  # CRUD for properties
+├── middleware/
+│   ├── auth.js                # JWT protect + role authorize
+│   └── validate.js            # Input sanitisation + validation
+├── models/
+│   ├── User.js                # User schema with security fields
+│   ├── Property.js            # Property schema
+│   └── Review.js              # Review schema
+├── routes/
+│   ├── auth.js                # Auth routes with validate middleware
+│   └── properties.js          # Property routes
+├── utils/
+│   ├── email.js               # Nodemailer Mailtrap SMTP sender
+│   └── response.js            # sendSuccess / sendError helpers
+├── server.js                  # Express app + middleware setup
 ├── package.json
 └── .env.example
 ```
+
+---
+
+## Email System
+
+Emails are sent via **Mailtrap SMTP** using Nodemailer:
+
+| Email Type         | Trigger                    | Content               |
+|--------------------|----------------------------|-----------------------|
+| Verification Email | On register                | Verify button + link  |
+| Welcome Email      | After email verified       | Welcome message       |
+| Password Reset     | On forgot-password request | Reset button + link   |
+
+All emails use responsive HTML templates with ApnaGhar branding.
+
+---
+
+## Deployment (Render)
+
+1. Root Directory: `backend`
+2. Build Command: `npm install`
+3. Start Command: `node server.js`
+4. Set all environment variables in Render Dashboard
+5. Health check URL: `https://apnaghar-backend.onrender.com/health`
