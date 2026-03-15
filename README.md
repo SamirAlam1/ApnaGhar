@@ -1,6 +1,6 @@
 # 🏡 ApnaGhar — Smart Indian Real Estate Marketplace
 
-> India's smartest property search platform, trusted by 50,000+ families.
+> India's trusted property search platform — Find your perfect home across top Indian cities.
 
 [![Node](https://img.shields.io/badge/Node-18%2B-green)](https://nodejs.org)
 [![React](https://img.shields.io/badge/React-18-blue)](https://react.dev)
@@ -11,7 +11,7 @@
 
 ## 📋 Project Description
 
-ApnaGhar is a full-stack MERN real estate marketplace targeting the Indian market. It features smart property recommendations, multi-language support (English, Hindi, Gujarati), RERA-verified listings, and a secure, production-ready authentication system.
+ApnaGhar is a full-stack MERN real estate marketplace targeting the Indian market. It features smart property search, multi-language support (English, Hindi, Gujarati), RERA-verified listings, and a secure, production-ready authentication system.
 
 ---
 
@@ -20,7 +20,7 @@ ApnaGhar is a full-stack MERN real estate marketplace targeting the Indian marke
 | Category | Feature |
 |---|---|
 | Auth | Register / Login with email + password |
-| Auth | Email verification via secure token (Nodemailer + Gmail SMTP) |
+| Auth | Email verification via secure token (Nodemailer + Mailtrap SMTP) |
 | Auth | Forgot / Reset password flow |
 | Auth | Brute-force protection (account lockout after 5 failed attempts) |
 | Auth | Disposable email domain blocking |
@@ -28,7 +28,7 @@ ApnaGhar is a full-stack MERN real estate marketplace targeting the Indian marke
 | Properties | Browse, filter, search listings |
 | Properties | RERA-verified badge, furnishing status |
 | Properties | Grid / list view |
-| AI | Smart search, AI property recommendations |
+| Search | Smart filters — BHK, budget, city, furnishing, amenities |
 | i18n | English, Hindi (हिन्दी), Gujarati (ગુજરાતી) |
 | UI | Dark / Light mode, Framer Motion animations |
 | Security | JWT auth, Helmet, rate limiting, input sanitisation |
@@ -43,7 +43,7 @@ ApnaGhar is a full-stack MERN real estate marketplace targeting the Indian marke
 | Backend | Node.js 18+, Express.js |
 | Database | MongoDB (Mongoose ODM) |
 | Auth | JWT + bcrypt (12 rounds) |
-| Email | Nodemailer + Gmail SMTP (free) |
+| Email | Nodemailer + Mailtrap SMTP |
 | Security | Helmet, express-rate-limit, input validation |
 | i18n | i18next (EN / HI / GU) |
 | Deploy | Vercel (frontend) + Render (backend) |
@@ -93,8 +93,7 @@ ApnaGhar/
 │   │   │   ├── ForgotPasswordPage.jsx
 │   │   │   ├── ResetPasswordPage.jsx
 │   │   │   └── ...
-│   │   ├── utils/
-│   │   │   └── validators.js  # Client-side validation (mirrors backend)
+│   │   ├── utils/validators.js
 │   │   ├── services/api.js
 │   │   ├── i18n/
 │   │   ├── App.jsx
@@ -102,14 +101,14 @@ ApnaGhar/
 │   ├── .env.example
 │   └── README.md
 │
-├── docs/                      # Detailed documentation
+├── docs/
 │   ├── AUTHENTICATION.md
 │   ├── API_DOCUMENTATION.md
 │   ├── PROJECT_STRUCTURE.md
 │   ├── SECURITY.md
 │   └── SETUP_GUIDE.md
 │
-└── README.md                  # ← You are here
+└── README.md
 ```
 
 ---
@@ -120,7 +119,7 @@ ApnaGhar/
 
 - Node.js 18+
 - MongoDB (local or Atlas)
-- Gmail account (for email verification)
+- Mailtrap account (for email verification)
 
 ### 1. Clone
 
@@ -132,31 +131,24 @@ cd ApnaGhar
 ### 2. Install dependencies
 
 ```bash
-# Backend
 cd backend && npm install
-
-# Frontend
 cd ../frontend && npm install
 ```
 
 ### 3. Configure environment
 
 ```bash
-# Backend
 cp backend/.env.example backend/.env
 # Edit backend/.env with your values
-
-# Frontend
-cp frontend/.env.example frontend/.env
 ```
 
 ### 4. Run development servers
 
 ```bash
-# Backend (http://localhost:5000)
+# Terminal 1 — Backend (http://localhost:5000)
 cd backend && npm run dev
 
-# Frontend (http://localhost:5173)
+# Terminal 2 — Frontend (http://localhost:5173)
 cd frontend && npm run dev
 ```
 
@@ -173,20 +165,20 @@ cd frontend && npm run dev
 | `MONGO_URI` | Yes | MongoDB connection string |
 | `JWT_SECRET` | Yes | Min 64-char random string |
 | `JWT_EXPIRE` | No | Token lifetime (default: 7d) |
-| `CLIENT_URL` | Yes | Frontend URL (for CORS + email links) |
-| `SMTP_HOST` | Yes* | SMTP host (e.g. smtp.gmail.com) |
-| `SMTP_PORT` | Yes* | SMTP port (587 for TLS) |
-| `SMTP_USER` | Yes* | Gmail address |
-| `SMTP_PASS` | Yes* | Gmail App Password |
-| `EMAIL_FROM` | No | Sender display name + email |
+| `CLIENT_URL` | Yes | Frontend URL (CORS + email links) |
+| `SMTP_HOST` | Yes* | e.g. `live.smtp.mailtrap.io` |
+| `SMTP_PORT` | Yes* | `587` |
+| `SMTP_USER` | Yes* | `api` (Mailtrap) |
+| `SMTP_PASS` | Yes* | Mailtrap API token |
+| `EMAIL_FROM` | No | e.g. `ApnaGhar <hello@demomailtrap.co>` |
 
-*Required for email verification. Without SMTP config, verification emails are skipped (development mode).
+*Without SMTP config, verification emails are skipped in development.
 
 ### Frontend (`frontend/.env`)
 
 | Variable | Required | Description |
 |---|---|---|
-| `VITE_API_URL` | Yes | Backend API URL (e.g. http://localhost:5000/api) |
+| `VITE_API_URL` | Yes | e.g. `http://localhost:5000/api` |
 
 ---
 
@@ -196,35 +188,31 @@ cd frontend && npm run dev
 |---|---|---|---|
 | POST | `/api/auth/register` | Public | Register new user |
 | POST | `/api/auth/login` | Public | Login |
-| GET | `/api/auth/verify-email/:token` | Public | Verify email address |
+| GET | `/api/auth/verify-email/:token` | Public | Verify email |
 | POST | `/api/auth/resend-verification` | Public | Resend verification email |
 | POST | `/api/auth/forgot-password` | Public | Request password reset |
 | POST | `/api/auth/reset-password/:token` | Public | Reset password |
-| GET | `/api/auth/me` | Bearer JWT | Get current user profile |
-| GET | `/api/properties` | Public | List properties with filters |
+| GET | `/api/auth/me` | JWT | Get current user |
+| GET | `/api/properties` | Public | List with filters |
 | GET | `/api/properties/:id` | Public | Property detail |
-| POST | `/api/properties` | Seller JWT | Create listing |
-| PUT | `/api/properties/:id` | Seller JWT | Update listing |
-| DELETE | `/api/properties/:id` | Seller JWT | Delete listing |
-
-See `docs/API_DOCUMENTATION.md` for full request/response schemas.
+| POST | `/api/properties` | Seller | Create listing |
+| PUT | `/api/properties/:id` | Seller | Update listing |
+| DELETE | `/api/properties/:id` | Seller | Delete listing |
 
 ---
 
 ## 🔒 Security Highlights
 
-- Passwords hashed with bcrypt (12 rounds)
-- JWT tokens expire in 7 days
-- Brute-force protection: 5 failed logins → 30-min account lock
-- Rate limiting: 20 auth requests / 15 min, 5 registrations / hour per IP
-- Email verification via SHA-256 hashed tokens (24-hour expiry)
-- Disposable email domains blocked (30+ providers)
-- Indian phone number validation with fake-sequence detection
-- Input sanitisation (HTML tag stripping, null-byte removal)
+- bcrypt (12 rounds) password hashing
+- JWT with 7-day expiry
+- 5 failed logins → 30-min account lockout
+- Rate limiting: 20 auth/15min, 5 registrations/hour per IP
+- SHA-256 hashed email tokens (24hr expiry)
+- 30+ disposable email domains blocked
+- Indian phone validation with fake-sequence detection
+- Input sanitisation (HTML stripping, null-byte removal)
 - Helmet security headers
-- CORS restricted to configured client URL
-
-See `docs/SECURITY.md` for details.
+- CORS restricted to CLIENT_URL + `*.vercel.app`
 
 ---
 
@@ -232,19 +220,32 @@ See `docs/SECURITY.md` for details.
 
 ### Frontend → Vercel
 
-```bash
-cd frontend && npm run build
-# Connect GitHub repo to Vercel
-# Set: VITE_API_URL=https://your-api.onrender.com/api
+```
+Root Directory:   frontend
+Framework:        Vite
+Build Command:    node ./node_modules/vite/bin/vite.js build
+Output Directory: dist
+Env:              VITE_API_URL=https://apnaghar-backend.onrender.com/api
 ```
 
 ### Backend → Render
 
 ```
-Build Command: npm install
-Start Command: node server.js
-Environment Variables: NODE_ENV, MONGO_URI, JWT_SECRET, CLIENT_URL, SMTP_*
+Root Directory: backend
+Build Command:  npm install
+Start Command:  node server.js
+Env:            NODE_ENV, MONGO_URI, JWT_SECRET, CLIENT_URL, SMTP_*
 ```
+
+---
+
+## 🌐 Live Links
+
+| | URL |
+|---|---|
+| 🌐 Frontend | https://apnaghar-finder.vercel.app |
+| ⚙️ Backend | https://apnaghar-backend.onrender.com |
+| ❤️ Health | https://apnaghar-backend.onrender.com/health |
 
 ---
 
