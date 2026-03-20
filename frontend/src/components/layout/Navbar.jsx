@@ -6,6 +6,7 @@ import {
   Home,
   Building2,
   Heart,
+  User,
   LogOut,
   Sun,
   Moon,
@@ -39,10 +40,8 @@ export default function Navbar() {
   const langRef = useRef(null);
   const userRef = useRef(null);
 
-  // Only homepage gets transparent navbar
-  const isHome = location.pathname === "/";
-  // Navbar is "solid" when: scrolled, dark mode, OR not on homepage
-  const solid = scrolled || dark || !isHome;
+  // Transparent navbar sirf Home page pe
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -61,6 +60,11 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   const navLinks = [
     { to: "/", label: t("nav.home"), icon: Home },
     { to: "/properties", label: t("nav.properties"), icon: Building2 },
@@ -69,19 +73,23 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
   const currentLang = LANGS.find((l) => l.code === i18n.language) || LANGS[0];
 
+  // Solid navbar on non-home pages, scrolled, or dark mode
+  const isSolid = !isHomePage || scrolled || dark;
+
   return (
     <motion.nav
       initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        solid
+        isSolid
           ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg border-b border-gray-100 dark:border-gray-800"
           : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
+
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <img
@@ -89,13 +97,9 @@ export default function Navbar() {
               alt="ApnaGhar Logo"
               className="h-9 w-9 group-hover:scale-110 transition-transform drop-shadow-md"
             />
-            <span
-              className={`font-display font-bold text-xl transition-colors ${
-                solid
-                  ? "text-gray-900 dark:text-white"
-                  : "text-white"
-              }`}
-            >
+            <span className={`font-display font-bold text-xl transition-colors ${
+              isSolid ? "text-gray-900 dark:text-white" : "text-white"
+            }`}>
               Apna<span className="text-teal-400">Ghar</span>
             </span>
           </Link>
@@ -109,7 +113,7 @@ export default function Navbar() {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   isActive(to)
                     ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
-                    : solid
+                    : isSolid
                       ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                       : "text-white/90 hover:text-white hover:bg-white/10"
                 }`}
@@ -119,26 +123,22 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Right controls */}
+          {/* Desktop Right controls */}
           <div className="hidden md:flex items-center gap-2">
+
             {/* Language */}
             <div ref={langRef} className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                  solid
+                  isSolid
                     ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     : "text-white/90 hover:bg-white/10"
                 }`}
               >
                 <Globe size={15} />
-                <span>
-                  {currentLang.flag} {currentLang.code.toUpperCase()}
-                </span>
-                <ChevronDown
-                  size={13}
-                  className={`transition-transform ${langOpen ? "rotate-180" : ""}`}
-                />
+                <span>{currentLang.flag} {currentLang.code.toUpperCase()}</span>
+                <ChevronDown size={13} className={`transition-transform ${langOpen ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence>
                 {langOpen && (
@@ -152,10 +152,7 @@ export default function Navbar() {
                     {LANGS.map((l) => (
                       <button
                         key={l.code}
-                        onClick={() => {
-                          i18n.changeLanguage(l.code);
-                          setLangOpen(false);
-                        }}
+                        onClick={() => { i18n.changeLanguage(l.code); setLangOpen(false); }}
                         className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 ${
                           i18n.language === l.code
                             ? "text-blue-600 dark:text-blue-400 font-semibold"
@@ -174,7 +171,7 @@ export default function Navbar() {
             <button
               onClick={toggle}
               className={`p-2 rounded-lg transition-all ${
-                solid
+                isSolid
                   ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                   : "text-white/90 hover:bg-white/10"
               }`}
@@ -187,7 +184,7 @@ export default function Navbar() {
               <Link
                 to="/wishlist"
                 className={`relative p-2 rounded-lg transition-all ${
-                  solid
+                  isSolid
                     ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     : "text-white/90 hover:bg-white/10"
                 }`}
@@ -209,17 +206,10 @@ export default function Navbar() {
                   className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-700 to-teal-600 text-white text-sm font-medium hover:shadow-md transition-all"
                 >
                   <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
-                    <span className="text-xs font-bold">
-                      {user.name?.[0]?.toUpperCase()}
-                    </span>
+                    <span className="text-xs font-bold">{user.name?.[0]?.toUpperCase()}</span>
                   </div>
-                  <span className="hidden sm:block max-w-[80px] truncate">
-                    {user.name}
-                  </span>
-                  <ChevronDown
-                    size={13}
-                    className={`transition-transform ${userOpen ? "rotate-180" : ""}`}
-                  />
+                  <span className="hidden sm:block max-w-[80px] truncate">{user.name}</span>
+                  <ChevronDown size={13} className={`transition-transform ${userOpen ? "rotate-180" : ""}`} />
                 </button>
                 <AnimatePresence>
                   {userOpen && (
@@ -239,25 +229,9 @@ export default function Navbar() {
                         </p>
                       </div>
                       {[
-                        {
-                          to: "/dashboard",
-                          icon: LayoutDashboard,
-                          label: t("nav.dashboard"),
-                        },
-                        ...(user.role === "seller"
-                          ? [
-                              {
-                                to: "/list-property",
-                                icon: Plus,
-                                label: t("nav.listProperty"),
-                              },
-                            ]
-                          : []),
-                        {
-                          to: "/wishlist",
-                          icon: Heart,
-                          label: t("nav.wishlist"),
-                        },
+                        { to: "/dashboard", icon: LayoutDashboard, label: t("nav.dashboard") },
+                        ...(user.role === "seller" ? [{ to: "/list-property", icon: Plus, label: t("nav.listProperty") }] : []),
+                        { to: "/wishlist", icon: Heart, label: t("nav.wishlist") },
                       ].map((item) => (
                         <Link
                           key={item.to}
@@ -269,11 +243,7 @@ export default function Navbar() {
                         </Link>
                       ))}
                       <button
-                        onClick={() => {
-                          logout();
-                          setUserOpen(false);
-                          navigate("/");
-                        }}
+                        onClick={() => { logout(); setUserOpen(false); navigate("/"); }}
                         className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                       >
                         <LogOut size={15} /> {t("nav.logout")}
@@ -287,7 +257,7 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    solid
+                    isSolid
                       ? "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                       : "text-white/90 hover:bg-white/10"
                   }`}
@@ -308,9 +278,7 @@ export default function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className={`md:hidden p-2 rounded-lg transition-colors ${
-              solid
-                ? "text-gray-700 dark:text-gray-300"
-                : "text-white"
+              isSolid ? "text-gray-700 dark:text-gray-300" : "text-white"
             }`}
           >
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -328,6 +296,8 @@ export default function Navbar() {
             className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800"
           >
             <div className="px-4 py-4 space-y-1">
+
+              {/* Nav Links */}
               {navLinks.map(({ to, label, icon: Icon }) => (
                 <Link
                   key={to}
@@ -342,6 +312,64 @@ export default function Navbar() {
                   <Icon size={17} /> {label}
                 </Link>
               ))}
+
+              {/* Logged in user — profile links */}
+              {user && (
+                <>
+                  <div className="pt-2 pb-1 border-t border-gray-100 dark:border-gray-800">
+                    <div className="flex items-center gap-3 px-4 py-2">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-700 to-teal-600 flex items-center justify-center text-white font-bold text-sm">
+                        {user.name?.[0]?.toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{user.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{user.role?.toUpperCase()}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    <LayoutDashboard size={17} /> {t("nav.dashboard")}
+                  </Link>
+
+                  {user.role === "seller" && (
+                    <Link
+                      to="/list-property"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      <Plus size={17} /> {t("nav.listProperty")}
+                    </Link>
+                  )}
+
+                  <Link
+                    to="/wishlist"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    <Heart size={17} />
+                    {t("nav.wishlist")}
+                    {wishlist.length > 0 && (
+                      <span className="ml-auto w-5 h-5 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center font-bold">
+                        {wishlist.length}
+                      </span>
+                    )}
+                  </Link>
+
+                  <button
+                    onClick={() => { logout(); setMobileOpen(false); navigate("/"); }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  >
+                    <LogOut size={17} /> {t("nav.logout")}
+                  </button>
+                </>
+              )}
+
+              {/* Language + Theme toggle */}
               <div className="pt-2 flex items-center justify-between border-t border-gray-100 dark:border-gray-800">
                 <div className="flex gap-2">
                   {LANGS.map((l) => (
@@ -349,22 +377,19 @@ export default function Navbar() {
                       key={l.code}
                       onClick={() => i18n.changeLanguage(l.code)}
                       className={`px-2 py-1 rounded-lg text-xs font-medium ${
-                        i18n.language === l.code
-                          ? "bg-blue-100 text-blue-700"
-                          : "text-gray-500"
+                        i18n.language === l.code ? "bg-blue-100 text-blue-700" : "text-gray-500"
                       }`}
                     >
-                      {l.flag}
+                      {l.flag} {l.code.toUpperCase()}
                     </button>
                   ))}
                 </div>
-                <button
-                  onClick={toggle}
-                  className="p-2 text-gray-600 dark:text-gray-400"
-                >
+                <button onClick={toggle} className="p-2 text-gray-600 dark:text-gray-400">
                   {dark ? <Sun size={18} /> : <Moon size={18} />}
                 </button>
               </div>
+
+              {/* Guest — Login/Register buttons */}
               {!user && (
                 <div className="flex gap-2 pt-2">
                   <Link
@@ -383,10 +408,11 @@ export default function Navbar() {
                   </Link>
                 </div>
               )}
+
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </motion.nav>
   );
-}
+                        }
